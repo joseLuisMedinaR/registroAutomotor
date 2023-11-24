@@ -1,0 +1,86 @@
+<!--
+* Este código fue desarrollado por Joselu
+* Para cualquier consulta, contactar a contacto@joseluweb.com.ar
+ -->
+
+<x-app-layout>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="backdrop-blur-lg mx-auto bg-opacity-80 rounded-lg shadow-lg p-5 bg-gray-900 text-white">
+                    <h2 class="text-2xl font-bold pb-5">Nuevo Auto</h2>
+                    <form action="{{ route('auto.store') }}" method="POST" name="alta" id="alta">
+                        @csrf
+                        <input type="hidden" name="_token" value={{ csrf_token() }}>
+                        <div class="mb-4">
+                            <label for="titular" class="block mb-2 text-sm font-medium">Titular</label>
+                            <select id="titular_id" name="titular_id"
+                                class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
+                                required>
+                                <option value="">Seleccione un titular</option>
+                                @foreach ($titulares as $titular)
+                                    <option value="{{ $titular->id }}">
+                                        {{ ucwords($titular->apellido) . ', ' . ucwords($titular->nombre) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="marca" class="block mb-2 text-sm font-medium">Marca</label>
+                            <input type="text" id="marca" name="marca"
+                                class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
+                                placeholder="Chevrolet" required value="">
+                        </div>
+                        <div class="mb-4">
+                            <label for="modelo" class="block mb-2 text-sm font-medium">Modelo</label>
+                            <input type="text" id="modelo" name="modelo"
+                                class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
+                                placeholder="Corsa Classic" required value="">
+                        </div>
+                        <div class="mb-4">
+                            <label for="patente" class="block mb-2 text-sm font-medium">Patente</label>
+                            <input type="text" id="patente" name="patente"
+                                class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
+                                placeholder="ABM123" required value="">
+                        </div>
+                        <div class="mb-4">
+                            <label for="tipo" class="block mb-2 text-sm font-medium">Tipo de Vehículo</label>
+                            <select name="tipo" id="tipo" name="tipo"
+                                class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
+                                required>
+                                <option value="">Seleccione el tipo de vehículo</option>
+                                @foreach ($tiposAutos as $tipo)
+                                    <option value="{{ $tipo }}">{{ strtoupper($tipo) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <p class="text-red-500 pb-5"></p>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <button type="submit"
+                                class="text-white bg-purple-600 hover:bg-purple-700 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 px-5 w-full sm:w-auto">
+                                Registrar
+                            </button>
+                            <button onclick="limpiarFormulario()"
+                                class="text-white bg-red-500 hover:bg-red-700 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 px-5 w-full sm:w-auto">
+                                Cancelar
+                            </button>
+                        </div>                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function limpiarFormulario() {
+            document.getElementById("alta").reset();
+            window.history.back();
+        }
+    </script>
+</x-app-layout>
+
+<!--
+* Este código fue desarrollado por Joselu
+* Para cualquier consulta, contactar a contacto@joseluweb.com.ar
+ -->

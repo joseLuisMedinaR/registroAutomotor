@@ -53,7 +53,7 @@ class TitularController extends Controller
         $titular->nombre = $request->get('nombre');
         $titular->dni = $request->get('dni');
         $titular->domicilio = $request->get('domicilio');
-        $titular->save();
+
         if ($titular->save()) {
             return redirect()->route('titular.index');
         } else {

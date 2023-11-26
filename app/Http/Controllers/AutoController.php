@@ -177,7 +177,14 @@ class AutoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $auto = Auto::findOrFail($id); // Busca el auto por su ID
+
+    if ($auto) {
+        $auto->delete(); // Elimina el registro del auto
+        return redirect()->route('auto.index')->with('success', 'El auto ha sido eliminado correctamente');
+    } else {
+        return redirect()->back()->with('error', 'No se encontró el auto o hubo un problema al eliminarlo');
+    }
     }
 }
 

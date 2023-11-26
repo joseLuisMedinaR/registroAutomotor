@@ -44,9 +44,14 @@ Route::patch('titular/{id}',  [TitularController::class,'update'])->name('titula
 
 /* AutoController */
 Route::resource('auto', AutoController::class,['name'=> 'auto'])->middleware(['auth', 'verified']);
+// Define la ruta para mostrar un auto en AutoController
 Route::get('auto/{id}', 'AutoController@show')->name('auto.show')->middleware(['auth', 'verified']);
+// Define la ruta para editar un auto en AutoController
 Route::get('/auto/{id}/editar', [AutoController::class,'edit'])->name('auto.edit')->middleware(['auth', 'verified']);
+// Define la ruta para actualizar un auto en AutoController
 Route::patch('auto/{id}',  [AutoController::class,'update'])->name('auto.update')->middleware(['auth', 'verified']);
+// Define la ruta para eliminar un auto en AutoController
+Route::delete('/autos/{id}', [AutoController::class, 'destroy'])->name('auto.destroy');
 
 /* InfraccionController */
 Route::resource('infraccion', InfraccionController::class,['name'=> 'infraccion'])->middleware(['auth', 'verified']);

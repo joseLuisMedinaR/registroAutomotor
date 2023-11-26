@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rules\Unique;
 
 return new class extends Migration {
     /**
@@ -13,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('apellido', 100);
             $table->string('nombre',100);
-            $table->char('dni',8);
+            $table->char('dni',8) ->Unique;
             $table->string('domicilio',255);
             $table->timestamps();
         });

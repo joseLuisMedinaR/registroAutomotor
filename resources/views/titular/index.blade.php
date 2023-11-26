@@ -42,19 +42,27 @@
                                 <td class="border px-4 py-2 p-3 text-sm tracking-wide text-left" style="width: 10px">
                                     <div class="flex justify-center items-center rounded-full mx-auto" style="width: fit-content; padding: 0 12px;">
                                         <div class="mr-2">
-                                            <a href="{{ route('titular.show', $titulares->id) }}">
-                                            <button class="font-bold md:text-xl bg-blue-600 rounded-full text-white px-6 py-1">
-                                                Ver
+                                            <a href="{{ route('titular.show', $titulares->id) }}">                                                   <button class="font-bold md:text-xl bg-green-500 rounded-full text-white flex items-center px-4 py-1 hover:bg-lime-600">
+                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 14">
+                                                    <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                                      <path d="M10 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                                                      <path d="M10 13c4.97 0 9-2.686 9-6s-4.03-6-9-6-9 2.686-9 6 4.03 6 9 6Z"/>
+                                                    </g>
+                                                  </svg>
+                                                <span>&nbsp;&nbsp;Ver</span>
                                             </button>
                                             </a>
                                         </div>
                                         <div class="mx-2">
                                             <a href="{{ route('titular.edit', $titulares->id) }}">
-                                            <button class="font-bold md:text-xl bg-blue-600 rounded-full text-white px-6 py-1">
-                                                Editar
-                                            </button>
+                                                <button class="font-bold md:text-xl bg-blue-600 rounded-full text-white flex items-center px-4 py-1 hover:bg-blue-800">
+                                                    <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1v3m5-3v3m5-3v3M1 7h7m1.506 3.429 2.065 2.065M19 7h-2M2 3h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Zm6 13H6v-2l5.227-5.292a1.46 1.46 0 0 1 2.065 2.065L8 16Z"/>
+                                                    </svg>
+                                                    <span>Editar</span>
+                                                </button>
                                             </a>
-                                        </div>
+                                        </div>                                        
                                     </div>                                              
                                 </td>
                             </tr>

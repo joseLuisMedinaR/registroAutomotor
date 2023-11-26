@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->bigInteger('titular_id')->unsigned();
             $table->string('marca',100);
             $table->string('modelo', 100);
-            $table->string('patente',15);
+            $table->string('patente',15) -> Unique;
             $table->enum('tipo', ['standar','suv','camioneta','camion']);
             $table->timestamps();
 

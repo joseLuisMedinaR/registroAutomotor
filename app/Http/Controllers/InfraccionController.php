@@ -1,9 +1,9 @@
 <?php
 
 /**
-* Este código fue desarrollado por Joselu
-* Para cualquier consulta, contactar a contacto@joseluweb.com.ar
-*/
+ * Este código fue desarrollado por Joselu
+ * Para cualquier consulta, contactar a contacto@joseluweb.com.ar
+ */
 
 namespace App\Http\Controllers;
 
@@ -21,14 +21,14 @@ class InfraccionController extends Controller
     public function index()
     {
         $infracciones = Infraccion::all();
-        return view("infraccion.index", ['infraccion'=>$infracciones]);
+        return view("infraccion.index", ['infraccion' => $infracciones]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    {   
+    {
         $autos = Auto::select('id', 'patente')->get(); // Obtener solo los campos id y patente de los autos
 
         // Obtener la cadena del enum desde la base de datos
@@ -63,17 +63,18 @@ class InfraccionController extends Controller
             'tipo' => 'El campo tipo es obligatorio.',
         ]);
 
-        //Damos de alta la nueva infracción
+        // Alta de la nueva infracción
         $infraccion = new Infraccion();
         $infraccion->auto_id = $request->input('auto_id');
         $infraccion->fecha = $request->input('fecha');
         $infraccion->descripcion = $request->input('descripcion');
         $infraccion->tipo = $request->input('tipo');
-        
+
         if ($infraccion->save()) {
             return redirect()->route('infraccion.index');
         } else {
-            return redirect()->back()->with('error', 'Hubo un problema al guardar los datos.');
+            // En caso de error, devuelve un mensaje de error
+            return redirect()->back()->withInput()->withErrors($validatedData);
         }
     }
 
@@ -90,7 +91,7 @@ class InfraccionController extends Controller
         // Verificar si se encontró la infracción
         if ($infraccion) {
             // Si se encontró, pasar los datos a la vista 'infraccion.infraccion'
-            return  response()->view('infraccion.infraccion', compact('infraccion','auto','titular'))->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
+            return  response()->view('infraccion.infraccion', compact('infraccion', 'auto', 'titular'))->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         } else {
             // Si no se encontró, redirigir
             return redirect()->back()->with('error', 'Infracción no encontrada');
@@ -102,13 +103,14 @@ class InfraccionController extends Controller
      */
     public function edit(string $id)
     {
-        // Recuperar el auto según el ID proporcionado
+        // Recuperar la infracción según el ID proporcionado
         $infraccion = Infraccion::find($id);
 
-        $autos = Auto::select('id', 'patente')->get(); // Obtener solo los campos id y patente
+        if (!$infraccion) {
+            return redirect()->back()->with('error', 'Infracción no encontrada');
+        }
 
-        // Recuperar la patente por defecto
-        $autoPorDefecto = Infraccion::find($infraccion->auto_id);
+        $autos = Auto::select('id', 'patente')->get(); // Obtener solo los campos id y patente
 
         // Obtener la cadena del enum desde la base de datos
         $enumValues = DB::select("SHOW COLUMNS FROM infracciones WHERE Field = 'tipo'")[0]->Type;
@@ -125,7 +127,7 @@ class InfraccionController extends Controller
         // Verificar si se encontró la infracción
         if ($infraccion) {
             // Si se encontró, pasar los datos a la vista 'infraccion.editar'
-            return response()->view('infraccion.editar', compact('infraccion','autos','autoPorDefecto','tiposInfracciones'))->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
+            return response()->view('infraccion.editar', compact('infraccion', 'autos', 'tiposInfracciones'))->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
         } else {
             // Si no se encontró, redirigir
             return redirect()->back()->with('error', 'Auto no encontrado');
@@ -161,7 +163,7 @@ class InfraccionController extends Controller
             return redirect()->route('infraccion.index');
         } else {
             // En caso de error, devuelve un mensaje de error
-            return redirect()->back()->with('error', 'Hubo un problema al guardar los datos.');
+            return redirect()->back()->withInput()->withErrors($validatedData);
         }
     }
 
@@ -170,12 +172,19 @@ class InfraccionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $infraccion = Infraccion::findOrFail($id); // Busca la infracción por su ID
+
+        if ($infraccion) {
+            $infraccion->delete(); // Elimina el registro
+            return redirect()->route('infraccion.index')->with('success', 'La infracción ha sido eliminado correctamente');
+        } else {
+            return redirect()->back()->with('error', 'No se encontró la infracción o hubo un problema al eliminarla');
+        }
     }
 }
 
 
 /**
-* Este código fue desarrollado por Joselu
-* Para cualquier consulta, contactar a contacto@joseluweb.com.ar
-*/
+ * Este código fue desarrollado por Joselu
+ * Para cualquier consulta, contactar a contacto@joseluweb.com.ar
+ */

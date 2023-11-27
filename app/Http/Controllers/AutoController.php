@@ -1,9 +1,9 @@
 <?php
 
 /**
-* Este código fue desarrollado por Joselu
-* Para cualquier consulta, contactar a contacto@joseluweb.com.ar
-*/
+ * Este código fue desarrollado por Joselu
+ * Para cualquier consulta, contactar a contacto@joseluweb.com.ar
+ */
 
 namespace App\Http\Controllers;
 
@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\Auto;
 use App\Models\Titular;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class AutoController extends Controller
 {
@@ -51,12 +52,12 @@ class AutoController extends Controller
      */
     public function store(Request $request)
     {
-        //Validamos que ningún campo venga vacío
+        //Validamos que ningún campo venga vacío y que la patente sea única
         $validatedData = $request->validate([
             'titular_id' => 'required|exists:titulares,id',
             'marca' => 'required',
             'modelo' => 'required',
-            'patente' => 'required',
+            'patente' => ['required', 'unique:autos,patente'],
             'tipo' => 'required',
         ], [
             'titular_id.required' => 'El campo titular es obligatorio.',
@@ -64,9 +65,10 @@ class AutoController extends Controller
             'modelo.required' => 'El campo modelo es obligatorio.',
             'patente.required' => 'El campo patente es obligatorio.',
             'tipo.required' => 'El campo tipo es obligatorio.',
+            'patente.unique' => 'La patente ingresada ya existe',
         ]);
 
-        //Insertamos el auto nuevo
+        // Alta del auto nuevo
         $auto = new Auto;
         $auto->titular_id = $request->input('titular_id');
         $auto->marca = $request->input('marca');
@@ -77,7 +79,8 @@ class AutoController extends Controller
         if ($auto->save()) {
             return redirect()->route('auto.index');
         } else {
-            return redirect()->back()->with('error', 'Hubo un problema al guardar los datos.');
+            // En caso de error, devuelve un mensaje de error
+            return redirect()->back()->withInput()->withErrors($validatedData);
         }
     }
 
@@ -140,12 +143,18 @@ class AutoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //Validamos que ningún campo venga vacío
+        // Obtener el auto según el ID proporcionado
+        $auto = Auto::find($id);
+
+        // Validamos que ningún campo venga vacío y que la patente sea única
         $validatedData = $request->validate([
             'titular_id' => 'required|exists:titulares,id',
             'marca' => 'required',
             'modelo' => 'required',
-            'patente' => 'required',
+            'patente' => [
+                'required',
+                Rule::unique('autos', 'patente')->ignore($auto->id),
+            ],
             'tipo' => 'required',
         ], [
             'titular_id.required' => 'El campo titular es obligatorio.',
@@ -153,8 +162,22 @@ class AutoController extends Controller
             'modelo.required' => 'El campo modelo es obligatorio.',
             'patente.required' => 'El campo patente es obligatorio.',
             'tipo.required' => 'El campo tipo es obligatorio.',
+            'patente.unique' => 'La patente ingresada ya existe',
         ]);
 
+        // Verificar si la patente actual ha cambiado
+        if ($request->patente !== $auto->patente) {
+            // La patente ha cambiado, ejecutar la validación de una patente única
+            $validatedData = $request->validate([
+                'patente' => [
+                    'required',
+                    Rule::unique('autos', 'patente')->ignore($auto->id),
+                ],
+            ], [
+                'patente.required' => 'El campo patente es obligatorio.',
+                'patente.unique' => 'La patente ingresada ya existe.',
+            ]);
+        }
 
         // Actualizar el auto según el ID proporcionado
         $auto = Auto::find($id);
@@ -168,7 +191,7 @@ class AutoController extends Controller
             return redirect()->route('auto.index');
         } else {
             // En caso de error, devuelve un mensaje de error
-            return redirect()->back()->with('error', 'Hubo un problema al guardar los datos.');
+            return redirect()->back()->withInput()->withErrors($validatedData);
         }
     }
 
@@ -179,17 +202,17 @@ class AutoController extends Controller
     {
         $auto = Auto::findOrFail($id); // Busca el auto por su ID
 
-    if ($auto) {
-        $auto->delete(); // Elimina el registro del auto
-        return redirect()->route('auto.index')->with('success', 'El auto ha sido eliminado correctamente');
-    } else {
-        return redirect()->back()->with('error', 'No se encontró el auto o hubo un problema al eliminarlo');
-    }
+        if ($auto) {
+            $auto->delete(); // Elimina el registro del auto
+            return redirect()->route('auto.index')->with('success', 'El auto ha sido eliminado correctamente');
+        } else {
+            return redirect()->back()->with('error', 'No se encontró el auto o hubo un problema al eliminarlo');
+        }
     }
 }
 
 
 /**
-* Este código fue desarrollado por Joselu
-* Para cualquier consulta, contactar a contacto@joseluweb.com.ar
-*/
+ * Este código fue desarrollado por Joselu
+ * Para cualquier consulta, contactar a contacto@joseluweb.com.ar
+ */

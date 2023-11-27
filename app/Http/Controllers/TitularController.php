@@ -9,6 +9,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Titular;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TitularController extends Controller
 {
@@ -34,6 +35,7 @@ class TitularController extends Controller
      */
     public function store(Request $request)
     {
+        // Validamos que ningún campo venga vacío y que el dni sea único
         $validatedData = $request->validate([
             'dni' => ['required', 'unique:titulares,dni', 'regex:/^[0-9]{7,10}$/'],
             'apellido' => 'required',
@@ -48,6 +50,7 @@ class TitularController extends Controller
             'dni.regex' => 'El DNI debe contener solo números y tener entre 7 y 10 caracteres.'
         ]);
 
+        // Alta de titular
         $titular = new Titular;
         $titular->apellido = $request->input('apellido');
         $titular->nombre = $request->input('nombre');
@@ -57,6 +60,7 @@ class TitularController extends Controller
         if ($titular->save()) {
             return redirect()->route('titular.index');
         } else {
+            // En caso de error, devuelve un mensaje de error
             return redirect()->back()->withInput()->withErrors($validatedData);
         }
     }
@@ -103,9 +107,16 @@ class TitularController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //Validamos que ningún campo venga vacío
+        // Obtener el titular según el ID proporcionado
+        $titular = Titular::find($id);
+
+        // Validamos que ningún campo venga vacío y que el dni sea único
         $validatedData = $request->validate([
-            'dni' => ['required', 'unique:titulares,dni', 'regex:/^[0-9]{7,10}$/'],
+            'dni' => [
+                'required',
+                Rule::unique('titulares', 'dni')->ignore($id),
+                'regex:/^[0-9]{7,10}$/'
+            ],
             'apellido' => 'required',
             'nombre' => 'required',
             'domicilio' => 'required',
@@ -113,13 +124,28 @@ class TitularController extends Controller
             'apellido.required' => 'El campo apellido es obligatorio',
             'nombre.required' => 'El campo nombre es obligatorio',
             'dni.required' => 'El campo dni es obligatorio',
-            'domicilio.required' => 'El campo domicilio es obligatorio',
             'dni.unique' => 'El DNI ingresado ya existe.',
-            'dni.regex' => 'El DNI debe contener solo números y tener entre 7 y 10 caracteres.'
+            'dni.regex' => 'El DNI debe contener solo números y tener entre 7 y 10 caracteres.',
+            'domicilio.required' => 'El campo domicilio es obligatorio',
         ]);
 
+        // Verificar si el DNI actual ha cambiado
+        if ($request->dni !== $titular->dni) {
+            // El DNI ha cambiado, ejecutar la validación de un DNI único
+            $validatedData = $request->validate([
+                'dni' => [
+                    'required',
+                    'unique:titulares,dni',
+                    'regex:/^[0-9]{7,10}$/'
+                ],
+            ], [
+                'dni.required' => 'El campo dni es obligatorio',
+                'dni.unique' => 'El DNI ingresado ya existe.',
+                'dni.regex' => 'El DNI debe contener solo números y tener entre 7 y 10 caracteres.'
+            ]);
+        }
+
         // Actualizar el titular según el ID proporcionado
-        $titular = Titular::find($id);
         $titular->apellido = $request->apellido;
         $titular->nombre = $request->nombre;
         $titular->dni = $request->dni;
@@ -128,6 +154,7 @@ class TitularController extends Controller
         if ($titular->save()) {
             return redirect()->route('titular.index');
         } else {
+            // En caso de error, devuelve un mensaje de error
             return redirect()->back()->withInput()->withErrors($validatedData);
         }
     }

@@ -24,24 +24,44 @@
                                         {{ ucwords($titular->apellido) . ', ' . ucwords($titular->nombre) }}</option>
                                 @endforeach
                             </select>
+                            @error('titular_id')
+                                <div class="text-xl font-semibold">
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-4">
                             <label for="marca" class="block mb-2 text-xl font-semibold">Marca</label>
                             <input type="text" id="marca" name="marca"
                                 class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
-                                placeholder="Chevrolet" required value="">
+                                placeholder="Chevrolet" required value="{{ old('marca') }}">
+                            @error('marca')
+                                <div class="text-xl font-semibold">
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-4">
                             <label for="modelo" class="block mb-2 text-xl font-semibold">Modelo</label>
                             <input type="text" id="modelo" name="modelo"
                                 class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
-                                placeholder="Corsa Classic" required value="">
+                                placeholder="Corsa Classic" required value="{{ old('modelo') }}">
+                            @error('modelo')
+                                <div class="text-xl font-semibold">
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-4">
                             <label for="patente" class="block mb-2 text-xl font-semibold">Patente</label>
                             <input type="text" id="patente" name="patente"
                                 class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
-                                placeholder="ABM123" required value="">
+                                placeholder="ABM123" required value="{{ old('patente') }}">
+                            @error('patente')
+                                <div class="text-xl font-semibold">
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-4">
                             <label for="tipo" class="block mb-2 text-xl font-semibold">Tipo de Vehículo</label>
@@ -53,20 +73,25 @@
                                     <option value="{{ $tipo }}">{{ strtoupper($tipo) }}</option>
                                 @endforeach
                             </select>
+                            @error('tipo')
+                                <div class="text-xl font-semibold">
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                         <div>
                             <p class="text-red-500 pb-5"></p>
                         </div>
                         <div class="flex items-center justify-between mb-4">
                             <button type="submit"
-                            class="text-white bg-sky-800 hover:bg-cyan-500 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xl py-2.5 px-5 w-full sm:w-auto shadow-sm shadow-white">
+                                class="text-white bg-sky-800 hover:bg-cyan-500 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xl py-2.5 px-5 w-full sm:w-auto shadow-sm shadow-white">
                                 Registrar
                             </button>
                             <button onclick="limpiarFormulario()"
-                            class="text-white bg-red-500 hover:bg-red-700 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xl py-2.5 px-5 w-full sm:w-auto shadow-sm shadow-white">
+                                class="text-white bg-red-500 hover:bg-red-700 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xl py-2.5 px-5 w-full sm:w-auto shadow-sm shadow-white">
                                 Cancelar
                             </button>
-                        </div>                        
+                        </div>
                     </form>
                 </div>
             </div>

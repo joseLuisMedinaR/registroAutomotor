@@ -23,18 +23,33 @@
                                         {{ strtoupper($auto->patente) }}</option>
                                 @endforeach
                             </select>
+                            @error('auto_id')
+                                <div class="text-xl font-semibold">
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-4">
                             <label for="fecha" class="block mb-2 text-xl font-semibold">Fecha</label>
                             <input type="date" id="fecha" name="fecha"
                                 class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full py-2.5 px-4"
-                                required value="">
+                                required value="{{ old('fecha') }}">
+                            @error('Fecha')
+                                <div class="text-xl font-semibold">
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-4">
                             <label for="descripcion" class="block mb-2 text-xl font-semibold">Descripción</label>
                             <textarea id="descripcion" name="descripcion"
                                 class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full"
-                                rows=10 placeholder="Ingrese la descripción" required value="" style="resize: none"></textarea>
+                                rows=10 placeholder="Ingrese la descripción" required style="resize: none">{{ old('descripcion') }}</textarea>
+                            @error('Descripción')
+                                <div class="text-xl font-semibold">
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                         <div class="mb-4">
                             <label for="tipo" class="block mb-2 text-xl font-semibold">Tipo de Multa</label>
@@ -46,20 +61,25 @@
                                     <option value="{{ $tipo }}">{{ strtoupper($tipo) }}</option>
                                 @endforeach
                             </select>
+                            @error('tipo')
+                                <div class="text-xl font-semibold">
+                                    <span>{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                         <div>
                             <p class="text-red-500 pb-5"></p>
                         </div>
                         <div class="flex items-center justify-between mb-4">
                             <button type="submit"
-                            class="text-white bg-sky-800 hover:bg-cyan-500 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xl py-2.5 px-5 w-full sm:w-auto shadow-sm shadow-white">
+                                class="text-white bg-sky-800 hover:bg-cyan-500 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xl py-2.5 px-5 w-full sm:w-auto shadow-sm shadow-white">
                                 Registrar
                             </button>
                             <button onclick="limpiarFormulario()"
-                            class="text-white bg-red-500 hover:bg-red-700 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xl py-2.5 px-5 w-full sm:w-auto shadow-sm shadow-white">
+                                class="text-white bg-red-500 hover:bg-red-700 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xl py-2.5 px-5 w-full sm:w-auto shadow-sm shadow-white">
                                 Cancelar
                             </button>
-                        </div>                        
+                        </div>
                     </form>
                 </div>
             </div>

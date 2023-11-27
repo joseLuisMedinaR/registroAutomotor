@@ -38,8 +38,11 @@ Route::middleware('auth')->group(function () {
 
 /* TitularController */
 Route::resource('titular', TitularController::class,['name'=> 'titular'])->middleware(['auth', 'verified']);
+// Define la ruta para mostrar un titualar en TitularController
 Route::get('titular/{id}', 'TitularController@show')->name('titular.show')->middleware(['auth', 'verified']);
+// Define la ruta para editar un titualar en TitularController
 Route::get('titular/{id}/editar', [TitularController::class,'edit'])->name('titular.edit')->middleware(['auth', 'verified']);
+// Define la ruta para actualizar un titualar en TitularController
 Route::patch('titular/{id}',  [TitularController::class,'update'])->name('titular.update')->middleware(['auth', 'verified']);
 
 /* AutoController */
@@ -55,9 +58,14 @@ Route::delete('/autos/{id}', [AutoController::class, 'destroy'])->name('auto.des
 
 /* InfraccionController */
 Route::resource('infraccion', InfraccionController::class,['name'=> 'infraccion'])->middleware(['auth', 'verified']);
+// Define la ruta para mostrar una infracción en InfraccionController
 Route::get('infraccion/{id}', 'InfraccionController@show')->name('infraccion.show')->middleware(['auth', 'verified']);
+// Define la ruta para editar una infracción en InfraccionController
 Route::get('infraccion/{id}/editar', [InfraccionController::class,'edit'])->name('infraccion.edit')->middleware(['auth', 'verified']);
+// Define la ruta para actualizar una infracción en InfraccionController
 Route::patch('infraccion/{id}',  [InfraccionController::class,'update'])->name('infraccion.update')->middleware(['auth', 'verified']);
+// Define la ruta para eliminar una infracción en InfraccionController
+Route::delete('/infraccion/{id}', [InfraccionController::class, 'destroy'])->name('infraccion.destroy');
 
 require __DIR__.'/auth.php';
 

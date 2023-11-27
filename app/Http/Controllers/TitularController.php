@@ -1,9 +1,9 @@
 <?php
 
 /**
-* Este código fue desarrollado por Joselu
-* Para cualquier consulta, contactar a contacto@joseluweb.com.ar
-*/
+ * Este código fue desarrollado por Joselu
+ * Para cualquier consulta, contactar a contacto@joseluweb.com.ar
+ */
 
 namespace App\Http\Controllers;
 
@@ -34,33 +34,33 @@ class TitularController extends Controller
      */
     public function store(Request $request)
     {
-        //Validamos que ningún campo venga vacío
         $validatedData = $request->validate([
+            'dni' => ['required', 'unique:titulares,dni', 'regex:/^[0-9]{7,10}$/'],
             'apellido' => 'required',
             'nombre' => 'required',
-            'dni' => 'required',
             'domicilio' => 'required',
         ], [
-            'apellido' => 'El campo apellido es obligatorio',
-            'nombre' => 'El campo nombre es obligatorio',
-            'dni' => 'El campo dni es obligatorio',
-            'domicilio' => 'El campo domicilio es obligatorio',
+            'apellido.required' => 'El campo apellido es obligatorio',
+            'nombre.required' => 'El campo nombre es obligatorio',
+            'dni.required' => 'El campo dni es obligatorio',
+            'domicilio.required' => 'El campo domicilio es obligatorio',
+            'dni.unique' => 'El DNI ingresado ya existe.',
+            'dni.regex' => 'El DNI debe contener solo números y tener entre 7 y 10 caracteres.'
         ]);
 
-        //Damos de alta la nueva infracción
         $titular = new Titular;
-        $titular->apellido = $request->get('apellido');
-        $titular->nombre = $request->get('nombre');
-        $titular->dni = $request->get('dni');
-        $titular->domicilio = $request->get('domicilio');
+        $titular->apellido = $request->input('apellido');
+        $titular->nombre = $request->input('nombre');
+        $titular->dni = $request->input('dni');
+        $titular->domicilio = $request->input('domicilio');
 
         if ($titular->save()) {
             return redirect()->route('titular.index');
         } else {
-            // En caso de error, devuelve un mensaje de error
-            return redirect()->back()->with('error', 'Hubo un problema al guardar los datos.');
+            return redirect()->back()->withInput()->withErrors($validatedData);
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -105,15 +105,17 @@ class TitularController extends Controller
     {
         //Validamos que ningún campo venga vacío
         $validatedData = $request->validate([
+            'dni' => ['required', 'unique:titulares,dni', 'regex:/^[0-9]{7,10}$/'],
             'apellido' => 'required',
             'nombre' => 'required',
-            'dni' => 'required',
             'domicilio' => 'required',
         ], [
-            'apellido' => 'El campo apellido es obligatorio',
-            'nombre' => 'El campo nombre es obligatorio',
-            'dni' => 'El campo dni es obligatorio',
-            'domicilio' => 'El campo domicilio es obligatorio',
+            'apellido.required' => 'El campo apellido es obligatorio',
+            'nombre.required' => 'El campo nombre es obligatorio',
+            'dni.required' => 'El campo dni es obligatorio',
+            'domicilio.required' => 'El campo domicilio es obligatorio',
+            'dni.unique' => 'El DNI ingresado ya existe.',
+            'dni.regex' => 'El DNI debe contener solo números y tener entre 7 y 10 caracteres.'
         ]);
 
         // Actualizar el titular según el ID proporcionado
@@ -126,8 +128,7 @@ class TitularController extends Controller
         if ($titular->save()) {
             return redirect()->route('titular.index');
         } else {
-            // En caso de error, devuelve un mensaje de error
-            return redirect()->back()->with('error', 'Hubo un problema al guardar los datos.');
+            return redirect()->back()->withInput()->withErrors($validatedData);
         }
     }
 
@@ -141,6 +142,6 @@ class TitularController extends Controller
 }
 
 /**
-* Este código fue desarrollado por Joselu
-* Para cualquier consulta, contactar a contacto@joseluweb.com.ar
-*/
+ * Este código fue desarrollado por Joselu
+ * Para cualquier consulta, contactar a contacto@joseluweb.com.ar
+ */
